@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <LinearLayout
+	    style="@style/container"
+	    android:orientation="vertical">
+
+        <Button
+            android:id="@+id/UpdateListSent"
+            style="@style/button"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:onClick="onClickOutbox"
+            android:text="@string/label_message_sent" />
+	
+        <Button
+            android:id="@+id/UpdateList"
+            style="@style/button"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:onClick="onClick"
+            android:text="@string/label_message_sender" />
+
+	   <Button
+	       android:id="@+id/SynchroSms"
+	       style="@style/button"
+	       android:layout_height="wrap_content"
+	       android:layout_margin="2dip"
+	       android:onClick="onClickForceSynchro"
+	       android:text="@string/label_message_force_synchro" />
+
+		<ListView android:id="@+id/SMSList" 
+				android:layout_height="wrap_content" 
+				android:layout_width="match_parent" 
+				android:layout_margin="2dip" />
+		
+	</LinearLayout>
+</RelativeLayout>

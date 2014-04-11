@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item 
+        android:id="@+id/menu_item_home" 
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_cloud"
+        android:title="@string/app_name"/>
+</menu>
