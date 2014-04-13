@@ -138,12 +138,21 @@ public class DateUtil {
 		}return null;
 	}
 	
-	public static String formatDateWithSecond(Date date) throws ParseException {
+	public static String formatDateWithSecond(Date date) {
 		SimpleDateFormat spf = new SimpleDateFormat(Constante.DATE_PATTERN_SECOND);
 		return spf.format(date);
 	}
 	public static Date formatDateWithSecond(final String strdate) throws ParseException {
 		SimpleDateFormat spf = new SimpleDateFormat(Constante.DATE_PATTERN_SECOND);
+		return spf.parse(strdate);
+	}
+	
+	public static String formatDateMinute(Date date){
+		SimpleDateFormat spf = new SimpleDateFormat(Constante.DATE_PATTERN_MINUTE);
+		return spf.format(date);
+	}
+	public static Date formatDateMinute(final String strdate) throws ParseException{
+		SimpleDateFormat spf = new SimpleDateFormat(Constante.DATE_PATTERN_MINUTE);
 		return spf.parse(strdate);
 	}
 	

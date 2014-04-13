@@ -63,7 +63,7 @@ public class SmsReceiver extends BroadcastReceiver
         Date now = new Date ();
         String pass = MD5Hash.md5Java(now.getTime()+"");
         if (PersistanceApplication.getInstance().isConnecte() ){
-        	pass = MD5Hash.md5Java(PersistanceApplication.getInstance().getUser().getMdp()+now.getTime());
+        	pass = MD5Hash.md5Java(PersistanceApplication.getInstance().getUser().getMdp()+DateUtil.formatDateMinute(now));
         }
         
         if ( extras != null )
@@ -71,24 +71,21 @@ public class SmsReceiver extends BroadcastReceiver
             Object[] smsExtra = (Object[]) extras.get( SMS_EXTRA_NAME );
             ContentResolver contentResolver = context.getContentResolver();
             SmsMessage smExt = null;
+            Date date_envoi = now;
             for ( int i = 0; i < smsExtra.length; ++i )
             {
             	SmsMessage sms = SmsMessage.createFromPdu((byte[])smsExtra[i]);
-            	SmsMessageCrypt smsCrypt = new SmsMessageCrypt(null, false, smExt.getOriginatingAddress(),pass ,sms.getMessageBody().toString(), contentResolver, new Date());
+            	SmsMessageCrypt smsCrypt = new SmsMessageCrypt(sms, false, sms.getOriginatingAddress(),pass ,sms.getMessageBody().toString(), contentResolver,date_envoi);
                 getColSmsMessageCrypts().add(smsCrypt);
             }
             
             // Envoi des Messages 
-            if (PersistanceApplication.getInstance().isConnecte() && smExt!=null){
-            	try {
-	            	for (SmsMessageCrypt object : getColSmsMessageCrypts()) {
-	            		if (!object.isOk()){
-		            		AddMessageAsync addMess = new AddMessageAsync(this);
-		            		addMess.execute(URLEncoder.encode(object.getStrPass()+""),object.getStrCrypte(),URLEncoder.encode(object.getSms().getOriginatingAddress()+""),URLEncoder.encode(object.getSms().getOriginatingAddress()+""), DateUtil.formatDateWithSecond(object.getDate_envoi()));
-	            		}
-					}
-            	} catch (ParseException e) {
-					System.out.println(e.getMessage());
+            if (PersistanceApplication.getInstance().isConnecte()){
+        		for (SmsMessageCrypt object : getColSmsMessageCrypts()) {
+            		if (!object.isOk()){
+	            		AddMessageAsync addMess = new AddMessageAsync(this);
+	            		addMess.execute(URLEncoder.encode(object.getStrPass()+""),object.getStrCrypte(),URLEncoder.encode(object.getSms().getOriginatingAddress()+""),URLEncoder.encode(object.getSms().getOriginatingAddress()+""), DateUtil.formatDateWithSecond(object.getDate_envoi()));
+            		}
 				}
         	}
          }
@@ -99,10 +96,11 @@ public class SmsReceiver extends BroadcastReceiver
 	public void callBackAsync (final SmsMessageCrypt _smsCrypte){
 			Toast to = null;
 			if (_smsCrypte.isOk()){
-				majColSmsMessageCrypts(_smsCrypte.getStrPass());
+				majColSmsMessageCrypts(_smsCrypte.getDate_envoi().getTime());
 				to = Toast.makeText(PersistanceApplication.getInstance().getCurrentApplication(), R.string.label_message_save, Constante.duration_toast);
 				
 			}else{
+				majColSmsMessageCrypts(_smsCrypte.getDate_envoi().getTime());
 				to = Toast.makeText(PersistanceApplication.getInstance().getCurrentApplication(), R.string.label_message_not_save, Constante.duration_toast);
 			}
 			to.show();
@@ -119,11 +117,11 @@ public class SmsReceiver extends BroadcastReceiver
 		this.colSmsMessageCrypts=newColSms;
 	}
 	
-	private synchronized void majColSmsMessageCrypts (final String _key){
+	private synchronized void majColSmsMessageCrypts (final long _key){
 		Collection<SmsMessageCrypt> colOut = new ArrayList<SmsMessageCrypt>();
 		
 		for (SmsMessageCrypt smsMessageCrypt : this.getColSmsMessageCrypts()) {
-			if ((!smsMessageCrypt.getStrPass().equals(_key))){
+			if (!(smsMessageCrypt.getDate_envoi().getTime()==_key)){
 				colOut.add(smsMessageCrypt);
 			}
 		}
