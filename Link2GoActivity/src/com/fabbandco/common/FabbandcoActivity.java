@@ -1,13 +1,12 @@
 package com.fabbandco.common;
 
-import java.util.ArrayList;
 import java.util.Collection;
-
-import com.fabbandco.android.application.Link2GoApplication;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.fabbandco.android.application.Link2GoApplication;
 
 public class FabbandcoActivity extends Activity {
 
