@@ -1,17 +1,14 @@
 package com.fabbandco.android.api;
 
 import java.net.URLEncoder;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
@@ -63,30 +60,46 @@ public class SmsReceiver extends BroadcastReceiver
         Date now = new Date ();
         String pass = MD5Hash.md5Java(now.getTime()+"");
         if (PersistanceApplication.getInstance().isConnecte() ){
-        	pass = MD5Hash.md5Java(PersistanceApplication.getInstance().getUser().getMdp()+DateUtil.formatDateMinute(now));
+        	pass = MD5Hash.md5Java(PersistanceApplication.getInstance().getUser().getMdp()+DateUtil.formatDateWithSecond(now));
         }
         
         if ( extras != null )
         {
+        	Collection <SmsMessageCrypt> colSmsAtraiter = new ArrayList<SmsMessageCrypt> ();
             Object[] smsExtra = (Object[]) extras.get( SMS_EXTRA_NAME );
             ContentResolver contentResolver = context.getContentResolver();
-            SmsMessage smExt = null;
             Date date_envoi = now;
             for ( int i = 0; i < smsExtra.length; ++i )
             {
+            	// Mise en place du cryptage pour chaque message
             	SmsMessage sms = SmsMessage.createFromPdu((byte[])smsExtra[i]);
             	SmsMessageCrypt smsCrypt = new SmsMessageCrypt(sms, false, sms.getOriginatingAddress(),pass ,sms.getMessageBody().toString(), contentResolver,date_envoi);
-                getColSmsMessageCrypts().add(smsCrypt);
+            	// Ajout pour la liste à traiter
+            	colSmsAtraiter.add(smsCrypt);
             }
             
             // Envoi des Messages 
             if (PersistanceApplication.getInstance().isConnecte()){
-        		for (SmsMessageCrypt object : getColSmsMessageCrypts()) {
-            		if (!object.isOk()){
+        		for (SmsMessageCrypt object : colSmsAtraiter) {
+        			// Envoi des messages à traiter reçu maintenant
+            		if (!object.isOk() && !object.isActif()){
 	            		AddMessageAsync addMess = new AddMessageAsync(this);
+	            		object.setActif(true);
 	            		addMess.execute(URLEncoder.encode(object.getStrPass()+""),object.getStrCrypte(),URLEncoder.encode(object.getSms().getOriginatingAddress()+""),URLEncoder.encode(object.getSms().getOriginatingAddress()+""), DateUtil.formatDateWithSecond(object.getDate_envoi()));
             		}
 				}
+        		for (SmsMessageCrypt object : getColSmsMessageCrypts()) {
+            		if (!object.isOk() && !object.isActif()){
+            			// Envoi des messages à traiter en attente de retraitement
+	            		AddMessageAsync addMess = new AddMessageAsync(this);
+	            		object.setActif(true);
+	            		addMess.execute(URLEncoder.encode(object.getStrPass()+""),object.getStrCrypte(),URLEncoder.encode(object.getSms().getOriginatingAddress()+""),URLEncoder.encode(object.getSms().getOriginatingAddress()+""), DateUtil.formatDateWithSecond(object.getDate_envoi()));
+            		}
+				}
+        		
+        	}else{
+        		// S'il l'application n'est pas connecté, on l'ajoute à la liste en reserve
+        		getColSmsMessageCrypts().addAll(colSmsAtraiter);
         	}
          }
 	}
@@ -98,10 +111,11 @@ public class SmsReceiver extends BroadcastReceiver
 			if (_smsCrypte.isOk()){
 				majColSmsMessageCrypts(_smsCrypte.getDate_envoi().getTime());
 				to = Toast.makeText(PersistanceApplication.getInstance().getCurrentApplication(), R.string.label_message_save, Constante.duration_toast);
-				
 			}else{
 				majColSmsMessageCrypts(_smsCrypte.getDate_envoi().getTime());
-				to = Toast.makeText(PersistanceApplication.getInstance().getCurrentApplication(), R.string.label_message_not_save, Constante.duration_toast);
+				// Mise en place dans la liste de retraitement si application non connecté ou sms en erreur
+				getColSmsMessageCrypts().add(_smsCrypte);
+				to = Toast.makeText(PersistanceApplication.getInstance().getCurrentApplication(), getColSmsMessageCrypts() + " à traiter", Constante.duration_toast);
 			}
 			to.show();
 	}

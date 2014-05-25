@@ -9,6 +9,7 @@ public class SmsMessageCrypt extends Entity {
 
 		private SmsMessage sms;
 		private boolean isOk = false;
+		private boolean isActif = false;
 		private String numero;
 		
 		private String strPass = "";
@@ -48,6 +49,15 @@ public class SmsMessageCrypt extends Entity {
 
 		public void setOk(boolean isOk) {
 			this.isOk = isOk;
+		}
+		
+		public boolean isActif() {
+			return isActif;
+		}
+
+
+		public void setActif(boolean isOk) {
+			this.isOk = isActif;
 		}
 
 

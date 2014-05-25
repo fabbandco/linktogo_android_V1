@@ -24,7 +24,8 @@ public interface Constante {
 	public static final String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm";
 	public static final String DATE_TIME_FULL_PATTERN = "dd/MM/yyyy HH:mm:ss";
 	public static final String DATE_PATTERN_SERVER = "yyyy-MM-dd HH:mm:ss";
-	public static final String DATE_PATTERN_SECOND = "yyyyMMddHHmmssSSS";
+	public static final String DATE_PATTERN_SECOND = "yyyyMMddHHmmss";
+	public static final String DATE_PATTERN_MILISECOND = "yyyyMMddHHmmssSSS";
 	public static final String DATE_PATTERN_MINUTE = "yyyyMMddHHmm";
 	
 }
