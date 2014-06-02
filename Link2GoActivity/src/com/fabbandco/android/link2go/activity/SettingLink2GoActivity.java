@@ -48,6 +48,33 @@ public class SettingLink2GoActivity extends PrivateFabbandcoActivity implements 
     	});
     }
 
+    
+    public void onclickActiveCd2m (){
+    	Switch swi = (Switch)findViewById(R.id.switchIsConnected);
+    	swi.setChecked(PersistanceApplication.getInstance().isConnecte());
+    	swi.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+    		@Override
+    		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    			Log.v("Switch State Connected=", ""+isChecked);
+    		}       
+    		
+    	});
+    }
+    
+    public void onclickInActiveCd2m (){
+    	Switch swi = (Switch)findViewById(R.id.switchIsC2dmDsiconected);
+    	swi.setChecked(PersistanceApplication.getInstance().isConnecte());
+    	swi.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+    		@Override
+    		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    		 	Switch swi = (Switch)findViewById(R.id.switchIsConnected);
+    		 	swi.setActivated(true);
+    		}       
+    		
+    	});
+    }
+    
+    
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 	}
