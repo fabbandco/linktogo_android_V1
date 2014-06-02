@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="10dp" >
 
     <Switch
         android:id="@+id/switchIsConnected"
@@ -12,23 +13,13 @@
         android:layout_alignParentTop="true"
         android:text="@string/label_is_connect" />
 
-    
-    <Switch
-        android:id="@+id/switchIsC2dm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/label_is_C2dm_is_connect" />
-    
      <Switch
-        android:id="@+id/switchIsC2dmDsiconected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/label_is_C2dm_is_disconnect" />
+         android:id="@+id/switchIsC2dm"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+       	 android:layout_alignParentRight="true"
+         android:layout_below="@+id/switchIsConnected"
+         android:text="@string/label_is_C2dm_is_connect" />
     
 </RelativeLayout>
