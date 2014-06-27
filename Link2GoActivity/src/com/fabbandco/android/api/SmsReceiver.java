@@ -93,7 +93,7 @@ public class SmsReceiver extends BroadcastReceiver
             			// Envoi des messages à traiter en attente de retraitement
 	            		AddMessageAsync addMess = new AddMessageAsync(this);
 	            		object.setActif(true);
-	            		addMess.execute(URLEncoder.encode(object.getStrPass()+""),object.getStrCrypte(),URLEncoder.encode(object.getSms().getOriginatingAddress()+""),URLEncoder.encode(object.getSms().getOriginatingAddress()+""), DateUtil.formatDateWithSecond(object.getDate_envoi()));
+	            		addMess.execute(URLEncoder.encode(object.getStrPass()+""),object.getStrCrypte(),URLEncoder.encode(object.getNumero()+""),URLEncoder.encode(object.getNumero()+""), DateUtil.formatDateWithSecond(object.getDate_envoi()));
             		}
 				}
         		

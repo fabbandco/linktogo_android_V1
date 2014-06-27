@@ -36,6 +36,7 @@ import com.fabbandco.android.model.Utilisateur;
 import com.fabbandco.android.util.StringUtil;
 import com.fabbandco.common.Constante;
 import com.fabbandco.common.PrivateFabbandcoActivity;
+import com.google.android.gcm.GCMRegistrar;
 
 public class Link2GoActivity extends PrivateFabbandcoActivity implements OnClickListener, OnItemClickListener{
 
@@ -50,6 +51,14 @@ public class Link2GoActivity extends PrivateFabbandcoActivity implements OnClick
 	        	startActivity(i);
 	        }else{
 	        	majView();
+	        	GCMRegistrar.checkDevice(this);
+	        	GCMRegistrar.checkManifest(this);
+	        	final String regId = GCMRegistrar.getRegistrationId(this);
+	        	if (regId.equals("")) {
+	        	  GCMRegistrar.register(this, Constante.GCM_SENDER_ID);
+	        	} else {
+	        	  Log.v("INFO","Already registered");
+	        	}
 	        }
     	  viewMessagesErrors();
     	  Log.d("Link2GoActivity", "off");

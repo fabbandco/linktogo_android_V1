@@ -28,4 +28,7 @@ public interface Constante {
 	public static final String DATE_PATTERN_MILISECOND = "yyyyMMddHHmmssSSS";
 	public static final String DATE_PATTERN_MINUTE = "yyyyMMddHHmm";
 	
+	// Android parameter
+	public static final String GCM_SENDER_ID="linktogo-fabbandco@appspot.gserviceaccount.com";
+	
 }
