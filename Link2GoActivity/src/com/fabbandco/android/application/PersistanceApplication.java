@@ -1,7 +1,5 @@
 package com.fabbandco.android.application;
 
-import com.fabbandco.android.link2go.activity.Link2GoActivity;
-import com.fabbandco.android.link2go.activity.LoginLink2GoActivity;
 import com.fabbandco.android.model.Utilisateur;
 
 
@@ -12,6 +10,7 @@ public class PersistanceApplication {
 	private String email = "";
 	private Utilisateur user = null;
 	private Link2GoApplication currentApplication;
+	private String registration_id  = "notSet";
 	
 
 	static public PersistanceApplication getInstance() {
@@ -56,6 +55,16 @@ public class PersistanceApplication {
 
 	public void setCurrentApplication(Link2GoApplication currentApplication) {
 		this.currentApplication = currentApplication;
+	}
+
+
+	public String getRegistration_id() {
+		return registration_id;
+	}
+
+
+	public void setRegistration_id(String registration_id) {
+		this.registration_id = registration_id;
 	}
 	
 }

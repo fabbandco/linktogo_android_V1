@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.fabbandco.android.api.SmsReceiver;
 import com.fabbandco.android.application.PersistanceApplication;
 import com.fabbandco.android.async.GetMessageAsync;
+import com.fabbandco.android.async.UpdateRegistrationIdAsync;
 import com.fabbandco.android.async.ValidateMessageSynchronisationAsync;
 import com.fabbandco.android.link2go.R;
 import com.fabbandco.android.model.Message;
@@ -56,9 +57,17 @@ public class Link2GoActivity extends PrivateFabbandcoActivity implements OnClick
 	        	final String regId = GCMRegistrar.getRegistrationId(this);
 	        	if (regId.equals("")) {
 	        	  GCMRegistrar.register(this, Constante.GCM_SENDER_ID);
+	        	  
+	        	  // Mise à jour du paramètre de GCMRegistrar pour ApI J2ee
+	        	 PersistanceApplication.getInstance().setRegistration_id(GCMRegistrar.getRegistrationId(this.getApplicationContext()));
+	        	 // Appel J2ee
+	        	 UpdateRegistrationIdAsync updtRegistr = new UpdateRegistrationIdAsync(this);
+	        	 updtRegistr.execute(PersistanceApplication.getInstance().getRegistration_id());
+	        	 
 	        	} else {
 	        	  Log.v("INFO","Already registered");
 	        	}
+	        	
 	        }
     	  viewMessagesErrors();
     	  Log.d("Link2GoActivity", "off");
@@ -182,6 +191,14 @@ public class Link2GoActivity extends PrivateFabbandcoActivity implements OnClick
 			Toast.makeText(this.getApplicationContext(),"Statut sms mis à jour", Constante.duration_toast).show();
 		}else{
 			Toast.makeText(this.getApplicationContext(),"Statut sms non mis à jour", Constante.duration_toast).show();
+		}
+	}
+	
+	public void callBackUpdateSynchro (final Boolean _isok){
+		if(_isok.booleanValue()){
+			Toast.makeText(this.getApplicationContext(),"Registration à jour", Constante.duration_toast).show();
+		}else{
+			Toast.makeText(this.getApplicationContext(),"Registration non mis à jour", Constante.duration_toast).show();
 		}
 	}
 	
